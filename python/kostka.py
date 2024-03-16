@@ -2,6 +2,7 @@
 
 import random as ran
 
+
 class Dice:
 
     def __init__(self, number_of_sides=6):
