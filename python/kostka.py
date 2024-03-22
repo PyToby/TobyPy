@@ -35,10 +35,4 @@ class Dice:
 
 
 if __name__ == "__main__":
-    d = Dice()
-
-    d.setNum_of_sides(20)
-    d.setNum_of_sides_man()
-    print(d.roll())
-    print(d)
-    
+    pass
