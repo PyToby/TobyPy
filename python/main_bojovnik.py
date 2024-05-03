@@ -4,6 +4,30 @@ from bojovnik import Bojovnik
 from kostka import Dice
 
 
+class Mag(Bojovnik):
+    def __init__(self, jmeno, zivot, utok, obrana, kostka, mana, magicky_utok):
+        super().__init__(jmeno, zivot, utok, obrana, kostka)
+        self._mana = mana
+        self._max_mana = mana
+        self._magicky_utok = magicky_utok
+
+    def utoc(self, souper):
+        if self._mana < self._max_mana:
+            self._mana = self._mana + 10
+            if self._mana > self._max_mana:
+                self._max_mana = self._mana
+            super().utoc(souper)
+        else:
+            uder = self._magicky_utok + self._kostka.roll()
+            zprava = f'{self._jmeno} utoci magii za {uder}hp.'
+            self.nastav_zpravu(zprava)
+            self._mana = 0
+            souper.bran_se(uder)
+
+    def graficka_mana(self):
+        return self.graficky_ukazatel(self._mana, self._max_mana)
+
+
 class Arena():
     def __init__(self, bojovnik1, bojovnik2, kostka):
         self._bojovnik1 = bojovnik1
@@ -13,17 +37,14 @@ class Arena():
     def _vykresli(self):
         self._vycisti()
         print("__________________ARENA__________________ \n")
-        print('Zdravi bojovniku: \n')
-        print(f'{self._bojovnik1} {self._bojovnik1.grafic_zivot()}')
-        print(f'{self._bojovnik2} {self._bojovnik2.grafic_zivot()}')
+        print('Bojovnici: \n')
+        self._vypis_bojovnika(self._bojovnik1)
+        self._vypis_bojovnika(self._bojovnik2)
+
 
     def _vycisti(self):
-        import sys as _sys
-        import subprocess as _subprocess
-        if _sys.platform.startswith('win'):
-            _subprocess.call(['cmd.exe', '/C', 'cls'])
-        else:
-            _subprocess.call(['clear'])
+        import os as _os
+        _os.system('cls' if _os.name == 'nt' else 'clear')
 
     def _vypis_zpravu(self, zprava):
         import time as _tm
@@ -51,10 +72,17 @@ class Arena():
                 self._vypis_zpravu(self._bojovnik1.vypis_zpravu())
                 self._vypis_zpravu(self._bojovnik2.vypis_zpravu())
 
+    def _vypis_bojovnika(self, bojovnik):
+        print(bojovnik)
+        print(f'Zivot: {bojovnik.grafic_zivot()}')
+        if isinstance(bojovnik, Mag):
+            print(f'Mana: {bojovnik.graficka_mana()}')
+
 
 kostka = Dice(10)
 bojovnik = Bojovnik("Eragon", 100, 20, 10, kostka)
 souper = Bojovnik('Shadow', 80, 30, 15, kostka)
+mag = Mag('Gandalf', 50, 15, 30, kostka, 30, 45)
 
-a = Arena(bojovnik, souper, kostka)
+a = Arena(mag, souper, kostka)
 a.zapas()
