@@ -21,5 +21,4 @@ for line in tabulka:
         zapis = zapis + column + ';'
     f.writelines(zapis)
     f.write('\n')
-
 f.close()
