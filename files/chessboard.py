@@ -2,10 +2,11 @@
 
 
 def num_fields():
-    for num in range(65):
-        print(num)
-        num += 1
-
+    for num in range(1, 65):
+        if num == 64:
+            print(f'{num}.')
+        else:
+            print(f'{num}, ', end='')
 
 if __name__ == '__main__':
     num_fields()
