@@ -2,7 +2,9 @@
 
 
 def num_fields():
-    pass
+    for num in range(65):
+        print(num)
+        num += 1
 
 
 if __name__ == '__main__':
